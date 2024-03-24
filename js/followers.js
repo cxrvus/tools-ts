@@ -17,4 +17,6 @@ const following = loadJson('following.json').relationships_following.map(x => ge
 
 const notFollowingBack = following.filter(follower => !followers.includes(follower))
 
+console.log(`-- Not Following You Back (${notFollowingBack.length}) --`)
 console.log(notFollowingBack.join('\n'))
+console.log()
