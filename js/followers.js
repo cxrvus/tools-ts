@@ -1,7 +1,7 @@
 const fs = require('fs')
 
 const TMP = `${__dirname}/../tmp`
-const DIR = `${TMP}/followers_and_following`
+const DIR = `${TMP}/connections/followers_and_following`
 
 const getWhiteList = () => {
 	const WL_PATH = `${TMP}/whitelist.txt`
