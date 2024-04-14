@@ -14,6 +14,9 @@ if not path or not os.path.isdir(path):
     print("<!> directory not provided or invalid")
     sys.exit(1)
 
+if path[-1] == '/':
+	path = path[:-1]
+
 folder_name = path.split('/')[-1]
 
 all_files = sorted(os.listdir(path))
