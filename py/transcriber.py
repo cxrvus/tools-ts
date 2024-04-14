@@ -30,13 +30,20 @@ print('transcribing...')
 with open(outfile, 'w') as file:
 	file.write('')
 
+
 for (i, file) in enumerate(files):
 	print(f'({i+1:02}/{file_count:02})')
+
 	audio = whisper.load_audio(os.path.join(path, file))
 	result = whisper.transcribe(model, audio, language='en', fp16=False)	
-	transcript += f'## {file}\n\n'
-	transcript += f'{result["text"]}\n\n\n'
+	text = result['text']
+	index = int(file.split('.')[0][3:])
+
+	transcript += f'## {index}\n\n'
+	transcript += f'{text}\n\n\n'
+
 	with open(outfile, 'w') as file:
 		file.write(transcript)
+
 
 print('done!')
