@@ -41,7 +41,9 @@ for (i, file) in enumerate(files):
 	index = int(file.split('.')[0][3:])
 
 	transcript += f'## {index}\n\n'
-	transcript += f'{text}\n\n\n'
+	transcript += f'![[{file}]]\n\n'
+	transcript += f'{text}\n\n'
+	transcript += '\n'
 
 	with open(outfile, 'w') as file:
 		file.write(transcript)
