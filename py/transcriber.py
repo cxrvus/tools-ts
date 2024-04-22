@@ -27,7 +27,7 @@ file_count = len(files)
 model = whisper.load_model('base')
 
 transcript = ''
-outfile = os.path.join(path, folder_name) + '.md'
+outfile = os.path.join(path, '_' + folder_name) + '.md'
 
 print('transcribing...')
 
