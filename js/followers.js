@@ -2,21 +2,45 @@ const fs = require('fs')
 
 const TMP = `${__dirname}/../tmp`
 const DIR = `${TMP}/connections/followers_and_following`
+const WL_PATH = `${TMP}/whitelist.txt`
+const ARCHIVE = `${TMP}/archive/followers_and_following`
 
-const getWhiteList = () => {
-	const WL_PATH = `${TMP}/whitelist.txt`
-	if (fs.existsSync(WL_PATH)) return fs.readFileSync(WL_PATH, 'utf-8').split('\n').filter(x => x)
-	else return []
+
+const tryReadFile = path => {
+	if (fs.existsSync(path)) return fs.readFileSync(path, 'utf8')
+	else return null
 }
 
-const loadJson = path => JSON.parse(fs.readFileSync(`${DIR}/${path}`, 'utf8'))
+const getWhiteList = () => {
+	return tryReadFile(WL_PATH)?.split('\n').filter(x => x) ?? []
+}
+
+
+const loadJson = (dir, path) => JSON.parse(tryReadFile(`${dir}/${path}`)) ?? []
 const getValue = obj => obj.string_list_data[0].value
 
-const followers = loadJson('followers_1.json').map(x => getValue(x)).concat(getWhiteList())
-const following = loadJson('following.json').relationships_following.map(x => getValue(x))
+const followers = loadJson(DIR, 'followers_1.json').map(x => getValue(x)).concat(getWhiteList())
+const following = loadJson(DIR, 'following.json').relationships_following.map(x => getValue(x))
 
 const notFollowingBack = following.filter(follower => !followers.includes(follower))
 
-console.log(`-- Not Following You Back (${notFollowingBack.length}) --`)
-console.log(notFollowingBack.join('\n'))
-console.log()
+const old_followers = loadJson(ARCHIVE, 'followers_1.json').map(x => getValue(x)).concat(getWhiteList())
+const unfollowed = old_followers.filter(x=>!followers.includes(x))
+
+if (notFollowingBack.length) {
+	console.log(`-- Not Following You Back (${notFollowingBack.length}) --`)
+	console.log(notFollowingBack.join('\n'))
+	console.log()
+}
+else {
+	console.log('Everyone you follow is still following you back.')
+}
+
+if (unfollowed.length) {
+	console.log(`-- Unfollowed You or Renamed (${unfollowed.length}) --`)
+	console.log(unfollowed.join('\n'))
+	console.log()
+}
+else {
+	console.log('No one has unfollowed you since the last time you checked.')
+}
