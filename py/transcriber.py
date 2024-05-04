@@ -20,7 +20,8 @@ if path[-1] == '/':
 folder_name = path.split('/')[-1]
 
 all_files = sorted(os.listdir(path))
-files = list(filter(lambda file: file.lower().endswith('.wav'), all_files))
+
+files = list(filter(lambda file: file.lower().endswith(('mp3', 'wav', 'ogg')), all_files))
 file_count = len(files)
 
 
